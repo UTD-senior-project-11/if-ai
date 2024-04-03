@@ -1,21 +1,25 @@
 from keras.applications import ResNet50
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.resnet50 import preprocess_input
-from keras.layers import GlobalAveragePooling2D, Dense, Flatten
+from keras.layers import GlobalAveragePooling2D, Dense, Flatten, Dropout, BatchNormalization
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 from keras.models import Model
+from sklearn.metrics import classification_report
 import os
 
 # Load pre-trained model
 base_model = ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3))
 
-# Freeze base model layers
-for layer in base_model.layers:
+# Freeze base model layers after first twenty layers
+for layer in base_model.layers[20:]:
     layer.trainable = False
 
 x = base_model.output
+# x = GlobalAveragePooling2D()(x)
 x = Dense(1024, activation='relu')(x)
+x = Dropout(0.5)(x)
+x = BatchNormalization()(x)
 predictions = Dense(1, activation='sigmoid')(x)  # 2 classes: banned and allowed
 
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -87,6 +91,12 @@ test_generator = datagen.flow_from_directory(
 loss, accuracy = model.evaluate(test_generator)
 print(f"Test Loss: {loss}")
 print(f"Test Accuracy: {accuracy}")
+
+y_pred_prob = model.predict(test_generator).ravel()
+y_pred = (y_pred_prob > 0.5).astype(int)
+y_true = test_generator.classes
+
+print(classification_report(y_true, y_pred))
 
 # Save
 model.save("model_test.h5")
