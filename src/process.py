@@ -21,14 +21,21 @@ def predict_image_class(image_path, model):
     # Perform prediction
     prediction = model.predict(img_array)
 
-    # Determine the predicted class
-    if prediction[0][0] >= 0.5:
-        return "allowed"
-    else:
-        return "banned"
+    # Get class labels
+    class_labels = ["banned", "allowed"]
 
+    # Get predicted class label
+    predicted_class = class_labels[int(np.round(prediction[0][0]))]
+
+    # Get predicted probability for each class
+    probabilities = {"banned": prediction[0][0], "allowed": 1 - prediction[0][0]}
+
+    return predicted_class, probabilities
 
 # Example usage:
 image_path = "cat.jpg"
 predicted_class = predict_image_class(image_path, loaded_model)
 print(f"The image is {predicted_class}.")
+print("Probabilities:")
+for class_label, prob in probabilities.items():
+    print(f"{class_label}: {prob:.4f}")
