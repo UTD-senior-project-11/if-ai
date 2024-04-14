@@ -1,4 +1,6 @@
-from keras.applications import ResNet50
+from keras.applications.resnet50 import ResNet50
+from keras_applications.resnet import ResNet50
+from tensorflow.keras.applications import resnet
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.resnet50 import preprocess_input
 from keras.layers import GlobalAveragePooling2D, Dense, Flatten, Dropout, BatchNormalization

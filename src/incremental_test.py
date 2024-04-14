@@ -59,9 +59,9 @@ features, labels = extract_features(data)
 
 # Compute cosine similarity
 def compute_similarity(query_feature, features):
+    print(query_feature)
     similarities = cosine_similarity(query_feature.reshape(1, -1), features)
     return similarities.flatten()
-
 
 # Function to find similar images based on cosine similarity
 def find_similar_images(query_image_path, threshold=0.8, top_n=5):
@@ -69,6 +69,7 @@ def find_similar_images(query_image_path, threshold=0.8, top_n=5):
     query_image = tf.keras.preprocessing.image.img_to_array(query_image)
     query_image = np.expand_dims(query_image, axis=0)
     query_feature = feature_extractor.predict(query_image).flatten()
+    print(query_feature)
 
     similarities = compute_similarity(query_feature, features)
 
@@ -92,7 +93,6 @@ def find_similar_images(query_image_path, threshold=0.8, top_n=5):
 
     plt.show()
 
-
 # Example usage
-query_image_path = '5.jpg'
+query_image_path = 'dog.jpg'
 find_similar_images(query_image_path)
