@@ -5,18 +5,23 @@ from keras import ops
 import matplotlib.pyplot as plt
 
 
-epochs = 10             # Refers to the number of times the entire dataset is passed
-                        # 
-batch_size = 16
-margin = 1              # Margin for contrastive loss.
+epochs = 10             # Refers to number of times the entire dataset is passed 
+                        # forward and backwards through the net during training.
 
+batch_size = 16         # Number of elements in the subset of the data used to 
+                        # update model parameters.
+
+margin = 1              # Defines the threshold of similar and dissimilar samples
+                        # considered during training
+
+# Load the MNIST dataset
 (x_train_val, y_train_val), (x_test, y_test) = keras.datasets.mnist.load_data()
 
 # Change the data type to a floating point format
 x_train_val = x_train_val.astype("float32")
 x_test = x_test.astype("float32")
 
-# Keep 50% of train_val  in validation set
+# Keep 50% of train_val in validation set
 x_train, x_val = x_train_val[:30000], x_train_val[30000:]
 y_train, y_val = y_train_val[:30000], y_train_val[30000:]
 del x_train_val, y_train_val
@@ -150,7 +155,9 @@ visualize(pairs_val[:-1], labels_val[:-1], to_show=4, num_col=4)
 
 visualize(pairs_test[:-1], labels_test[:-1], to_show=4, num_col=4)
 
-
+###################################################################
+# Defines the model                                               #
+###################################################################
 # Provided two tensors t1 and t2
 # Euclidean distance = sqrt(sum(square(t1-t2)))
 def euclidean_distance(vects):
@@ -198,6 +205,9 @@ normal_layer = keras.layers.BatchNormalization()(merge_layer)
 output_layer = keras.layers.Dense(1, activation="sigmoid")(normal_layer)
 siamese = keras.Model(inputs=[input_1, input_2], outputs=output_layer)
 
+###################################################################
+# Defines the contrastive loss                                    #
+###################################################################
 def loss(margin=1):
     """Provides 'contrastive_loss' an enclosing scope with variable 'margin'.
 
@@ -229,10 +239,15 @@ def loss(margin=1):
 
     return contrastive_loss
 
-
+###################################################################
+# Compile the model with the contrastive loss function            #
+###################################################################
 siamese.compile(loss=loss(margin=margin), optimizer="RMSprop", metrics=["accuracy"])
 siamese.summary()
 
+###################################################################
+# Train the model                                                 #
+###################################################################
 history = siamese.fit(
     [x_train_1, x_train_2],
     labels_train,
@@ -241,6 +256,9 @@ history = siamese.fit(
     epochs=epochs,
 )
 
+###################################################################
+# Visualize results                                               #
+###################################################################
 def plt_metric(history, metric, title, has_valid=True):
     """Plots the given 'metric' from 'history'.
 
@@ -269,8 +287,10 @@ plt_metric(history=history.history, metric="accuracy", title="Model accuracy")
 # Plot the contrastive loss
 plt_metric(history=history.history, metric="loss", title="Contrastive Loss")
 
+# Evaluate model
 results = siamese.evaluate([x_test_1, x_test_2], labels_test)
 print("test loss, test acc:", results)
 
+# Visualizes the predictions
 predictions = siamese.predict([x_test_1, x_test_2])
 visualize(pairs_test, labels_test, to_show=3, predictions=predictions, test=True)
