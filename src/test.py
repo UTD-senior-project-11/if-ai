@@ -4,9 +4,11 @@ import keras
 from keras import ops
 import matplotlib.pyplot as plt
 
-epochs = 10
+
+epochs = 10             # Refers to the number of times the entire dataset is passed
+                        # 
 batch_size = 16
-margin = 1  # Margin for contrastive loss.
+margin = 1              # Margin for contrastive loss.
 
 (x_train_val, y_train_val), (x_test, y_test) = keras.datasets.mnist.load_data()
 
