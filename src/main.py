@@ -1,5 +1,8 @@
 import time
 import socket
+from sklearn.datasets import load_iris
+
+data = load_iris()
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("0.0.0.0", 5000))
