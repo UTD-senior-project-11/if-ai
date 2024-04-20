@@ -87,6 +87,9 @@ x_val_2 = pairs_val[:, 1]
 x_test_1 = pairs_test[:, 0]  # x_test_1.shape = (20000, 28, 28)
 x_test_2 = pairs_test[:, 1]
 
+###################################################################
+# Visualize pairs and their labels                                #
+###################################################################
 def visualize(pairs, labels, to_show=6, num_col=3, predictions=None, test=False):
     """Creates a plot of pairs and labels, and prediction if it's test dataset.
 
