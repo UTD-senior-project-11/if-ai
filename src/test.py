@@ -4,13 +4,30 @@ import keras
 from keras import ops
 import matplotlib.pyplot as plt
 
+import base64
+
+from PIL import Image
 
 epochs = 10             # Refers to the number of times the entire dataset is passed
                         # 
 batch_size = 16
 margin = 1              # Margin for contrastive loss.
 
+hellotest = keras.datasets.mnist.load_data()
+
 (x_train_val, y_train_val), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+imgdata = base64.b64decode(str("the image"))
+
+theimage = Image.open(io.BytesIO(imgdata))
+
+img = Image.open('./src/snifdim.png')
+
+numpydata = np.array(img)
+
+print(numpydata.shape)
+
+exit()
 
 # Change the data type to a floating point format
 x_train_val = x_train_val.astype("float32")

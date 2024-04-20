@@ -1,0 +1,8 @@
+services:
+  ai:
+    build:
+      context: .
+    ports:
+      - 1357:5000
+    volumes:
+      - ./src:/app/src
