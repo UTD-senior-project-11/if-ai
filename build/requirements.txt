@@ -1,5 +1,6 @@
+fastapi
 keras==3.2
 matplotlib
 Pillow
-scikit-learn        # for testing purposes
 tensorflow==2.16.1
+uvicorn
