@@ -17,6 +17,10 @@ margin = 1              # Defines the threshold of similar and dissimilar sample
 # Load the MNIST dataset
 (x_train_val, y_train_val), (x_test, y_test) = keras.datasets.mnist.load_data()
 
+num_elements_x_train_val = len(x_train_val)
+print(num_elements_x_train_val)
+exit()
+
 # Change the data type to a floating point format
 x_train_val = x_train_val.astype("float32")
 x_test = x_test.astype("float32")
