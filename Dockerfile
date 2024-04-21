@@ -1,10 +1,12 @@
 FROM python:3.11-slim-buster
 
-WORKDIR /app/
 EXPOSE 5000
 
-COPY . /app/
+WORKDIR /app/
 
-RUN pip3 install -r build/requirements.txt
+COPY ./src/ ./src/
+COPY ./build/requirements.txt .
+
+RUN pip3 install -r requirements.txt
 
 CMD ["python3", "./src/main.py"]
