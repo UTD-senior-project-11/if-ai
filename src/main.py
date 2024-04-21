@@ -1,19 +1,11 @@
-import time
-import socket
-from sklearn.datasets import load_iris
+import uvicorn
+from fastapi import FastAPI
 
-data = load_iris()
+app = FastAPI()
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(("0.0.0.0", 5000))
+@app.get("/")
+def central_function():
+    return {"Neural": "Nine"}
 
-server.listen()
-
-while True:
-    client, addr = server.accept()
-    print("Connection from ", addr)
-    client.send("you are connected!\n".encode())
-    client.send(f"{data['data'][:.0]}\n".encode())
-    time.sleep(2)
-    clinet.send("You are being disconnected!\n".encode())
-    clinet.close()
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5000)
