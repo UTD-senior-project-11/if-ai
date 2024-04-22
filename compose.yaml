@@ -6,3 +6,4 @@ services:
       - 1357:5000
     volumes:
       - ./src:/app/src
+    network_mode: host

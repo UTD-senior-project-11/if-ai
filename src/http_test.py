@@ -1,7 +1,8 @@
 from flask import Flask
+from flask import request
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.post("/sendimages")
 def get_data():
-    return "hello\n"
+    return request.json
