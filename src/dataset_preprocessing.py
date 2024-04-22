@@ -1,12 +1,15 @@
 import cv2
 import numpy as np
 import os
+from sklearn.utils import shuffle
 
-src_dir = os.getcwd()
+# Specify the path to the folder containing images
+proj_dir = os.getcwd()
+folder_path = proj_dir + "/build/dataset/"
 
 # Specify target size for resizing images
-width = 100
-height = 100
+width = 140
+height = 140
 
 def resize_image(image, target_size):
     """Resize the image to the target size (tuple: width, height)."""
@@ -39,19 +42,23 @@ def load_images_from_folder(folder):
     return np.array(images), np.array(labels)
 
 
-# Specify the path to the folder containing images
-folder_path = src_dir + "/../build/dataset/"
-
 # Load images and corresponding labels from the folder
 images, labels = load_images_from_folder(folder_path)
 
-# Normalize pixel values to the range [0, 255]
+# Normalize pixel values
 images = images.astype("float32") / 255.0
 
+# Random shuffle dataset
+images, labels = shuffle(images, labels, random_state=69)
+
 # Print the shape of the images array and the labels array
-#print("Images shape:", images.shape)
-#print("Labels shape:", labels.shape)
+np.set_printoptions(threshold=np.inf)
+print("Images shape:", images.shape)
+print("Labels shape:", labels.shape)
+#print(images[0])
+#print(labels[0])
 
 # Save the images to a numpy file for loading later on
 np.save(f'{folder_path}images.npy', images)
 np.save(f'{folder_path}labels.npy', labels)
+
