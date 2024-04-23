@@ -7,6 +7,6 @@ app = Flask(__name__)
 
 @app.post("/sendimages")
 def get_data():
-    imageData = request.json.get('imageData')
+    imageData = request.get_data().decode("utf-8")
     result = evaluate(imageData)
     return ("C" if result[0] < 0.5 else "D") + "\n"

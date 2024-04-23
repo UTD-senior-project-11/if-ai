@@ -8,8 +8,8 @@ import io
 import base64
 from PIL import Image
 
-def load_my_image(imgString):
-    img = imgString.resize((224, 224))
+def load_my_image(decodedImg):
+    img = decodedImg.resize((224, 224))
     img = img_to_array(img)
     img = img.reshape(1, 224, 224, 3)  # 3 channels for RGB
 
@@ -21,7 +21,8 @@ def load_my_image(imgString):
 
 # load an image and predict the class
 def evaluate(imageString):
-    img = load_my_image(imageString)
+    decodedImg = Image.open(io.BytesIO(base64.b64decode(imageString)))
+    img = load_my_image(decodedImg)
     model = load_model('./src/final_model.h5')
-    result = model.predict(testimg)
+    result = model.predict(img)
     return result[0]
